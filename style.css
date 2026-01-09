@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle, #0b1024, #000);
+  color: white;
+  text-align: center;
+}
+
+header {
+  padding: 80px;
+  animation: fadeIn 2s ease;
+}
+
+section {
+  padding: 40px;
+}
+
+input {
+  padding: 10px;
+  margin: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #7dd3fc;
+  color: black;
+}
+
+iframe {
+  width: 300px;
+  height: 170px;
+  margin: 10px;
+  border-radius: 12px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
