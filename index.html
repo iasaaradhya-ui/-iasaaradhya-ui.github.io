@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Piano | Eyes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aaradhya | Piano</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,17 +17,125 @@
   <input id="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
   <button onclick="login()">Login</button>
+  <button onclick="googleLogin()" style="background:#4285F4;color:white;">Login with Google</button>
 </section>
 
 <section id="content" style="display:none">
-  <h2>🎥 Video Gallery</h2>
-  <div id="videos"></div>
+  <section>
+    <h2>🎥 Video Gallery</h2>
+    <div id="videos"></div>
+  </section>
+
+  <section>
+    <h2>📸 Image Gallery</h2>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <section>
+    <h2>🎵 Piano Recordings</h2>
+    <div id="songs"></div>
+  </section>
 </section>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="app.js"></script>
+<script type="module">
+// Firebase v9+ imports
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+// 🔥 Firebase config - replace with YOUR project keys
+const firebaseConfig = {
+  apiKey: "AIzaSyC4k4EhNS9jbJs7TjKU705uZ0oOtcXGabk",
+  authDomain: "piano-cea95.firebaseapp.com",
+  projectId: "piano-cea95",
+  storageBucket: "piano-cea95.firebasestorage.app",
+  messagingSenderId: "222706527640",
+  appId: "1:222706527640:web:b7adf304a4f8accb878fed",
+  measurementId: "G-DE93V7RN6M"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// 🔐 Email login
+async function login() {
+  const emailInput = document.getElementById("email").value;
+  const passwordInput = document.getElementById("password").value;
+  try {
+    await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+    document.getElementById("login").style.display = "none";
+    document.getElementById("content").style.display = "block";
+  } catch(err) { alert(err.message); }
+}
+
+// 🌐 Google login
+async function googleLogin() {
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithPopup(auth, provider);
+    document.getElementById("login").style.display = "none";
+    document.getElementById("content").style.display = "block";
+  } catch(err) { alert(err.message); }
+}
+
+// 📊 Visitor counter
+async function updateVisitorCount() {
+  const counterRef = doc(db, "stats", "visits");
+  const docSnap = await getDoc(counterRef);
+  let count = docSnap.exists() ? docSnap.data().count + 1 : 1;
+  await setDoc(counterRef, { count });
+  document.getElementById("visitorCount").innerText = "Visitors: " + count;
+}
+
+// 🎥 Video gallery
+function loadVideos() {
+  const videosDiv = document.getElementById("videos");
+  const videosCol = collection(db, "videos");
+  onSnapshot(videosCol, snapshot => {
+    videosDiv.innerHTML = "";
+    snapshot.forEach(doc => {
+      videosDiv.innerHTML += `<iframe src="https://www.youtube.com/embed/${doc.data().id}" allowfullscreen></iframe>`;
+    });
+  });
+}
+
+// 📸 Image gallery
+function loadImages() {
+  const galleryDiv = document.getElementById("gallery");
+  const imagesCol = collection(db, "images");
+  onSnapshot(imagesCol, snapshot => {
+    galleryDiv.innerHTML = "";
+    snapshot.forEach(doc => {
+      galleryDiv.innerHTML += `<img src="${doc.data().url}" alt="Gallery Image">`;
+    });
+  });
+}
+
+// 🎵 Multiple audio tracks
+function loadSongs() {
+  const songsDiv = document.getElementById("songs");
+  const songsCol = collection(db, "songs");
+  onSnapshot(songsCol, snapshot => {
+    songsDiv.innerHTML = "";
+    snapshot.forEach(doc => {
+      songsDiv.innerHTML += `<audio controls src="${doc.data().url}"></audio>`;
+    });
+  });
+}
+
+// 🔥 Initialize on page load
+window.onload = () => {
+  updateVisitorCount();
+  loadVideos();
+  loadImages();
+  loadSongs();
+};
+</script>
 
 </body>
 </html>
+
