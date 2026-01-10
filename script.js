@@ -1,21 +1,23 @@
-// 🔐 SIMPLE LOGIN (change credentials here)
-const USER = "aaradhya";
-const PASS = "piano123";
-
-function login() {
-  const u = username.value;
-  const p = password.value;
-  if (u === USER && p === PASS) {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("content").classList.remove("hidden");
-  } else {
-    alert("Wrong login");
-  }
-}
-
-// 📊 VISITOR COUNTER
+// 📊 Visitor counter (all visitors)
 let visits = localStorage.getItem("visits");
 visits = visits ? Number(visits) + 1 : 1;
 localStorage.setItem("visits", visits);
 document.getElementById("visitorCount").innerText =
   "Visitors: " + visits;
+
+// 🔐 ADMIN LOGIN
+const ADMIN_PASSWORD = "pianoAdmin123";
+
+function openAdmin() {
+  document.getElementById("adminLogin").classList.toggle("hidden");
+}
+
+function adminLogin() {
+  const pass = document.getElementById("adminPass").value;
+  if (pass === ADMIN_PASSWORD) {
+    document.getElementById("adminLogin").classList.add("hidden");
+    document.getElementById("adminPanel").classList.remove("hidden");
+  } else {
+    alert("Wrong password");
+  }
+}
