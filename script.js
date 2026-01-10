@@ -1,23 +1,18 @@
-// 📊 Visitor counter (all visitors)
+// 📊 Visitor counter
 let visits = localStorage.getItem("visits");
 visits = visits ? Number(visits) + 1 : 1;
 localStorage.setItem("visits", visits);
-document.getElementById("visitorCount").innerText =
-  "Visitors: " + visits;
 
-// 🔐 ADMIN LOGIN
-const ADMIN_PASSWORD = "pianoAdmin123";
+const vc = document.getElementById("visitorCount");
+if (vc) vc.innerText = "Visitors: " + visits;
 
-function openAdmin() {
-  document.getElementById("adminLogin").classList.toggle("hidden");
-}
+// 🔐
+// 📊 Visitor counter
+let visits = localStorage.getItem("visits");
+visits = visits ? Number(visits) + 1 : 1;
+localStorage.setItem("visits", visits);
 
-function adminLogin() {
-  const pass = document.getElementById("adminPass").value;
-  if (pass === ADMIN_PASSWORD) {
-    document.getElementById("adminLogin").classList.add("hidden");
-    document.getElementById("adminPanel").classList.remove("hidden");
-  } else {
-    alert("Wrong password");
-  }
-}
+const vc = document.getElementById("visitorCount");
+if (vc) vc.innerText = "Visitors: " + visits;
+
+// 🔐
